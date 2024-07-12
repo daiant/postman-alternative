@@ -1,0 +1,8 @@
+[request]
+url = "https://api.power-electronics.com"
+method = "GET"
+headers = [
+  { name = "Content-Type", value = "application/json" },
+  { name = "Authorization", value = "Bearer pitos" },
+  { name = "Method", value = "POST" }
+]
