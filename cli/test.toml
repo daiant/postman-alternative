@@ -1,0 +1,6 @@
+url = "https://api.power-electronics.com"
+method = "GET"
+
+[[headers]]
+  Name = "Holi"
+  Value = "QUETAL"

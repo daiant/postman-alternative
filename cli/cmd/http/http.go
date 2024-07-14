@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	filepathUtil "path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -18,7 +19,7 @@ func init() {
 	HttpCmd.Flags().StringArrayVarP(&headers, "header", "H", []string{}, "Header present in the payload")
 	HttpCmd.Flags().StringVar(&body, "data", "", "POST Body")
 	HttpCmd.Flags().StringVarP(&filepath, "file", "f", "", "Location of TOML Request File")
-
+	HttpCmd.Flags().StringVar(&save, "save", "", "Saves request to configuration file")
 	HttpCmd.MarkFlagsOneRequired("url", "file")
 	client = http.Client{}
 }
@@ -30,14 +31,18 @@ var (
 	filepath string
 	method   string
 	headers  []string
+	save     string
 	HttpCmd  = &cobra.Command{
 		Use:   "http",
 		Short: "Makes an HTTP request",
 		Run: func(cmd *cobra.Command, args []string) {
-			if len(url) <= 0 {
+			if len(filepath) > 0 {
 				loadFromFile()
 			}
 			printResult(makeRequest(method))
+			if len(save) > 0 {
+				saveToFile()
+			}
 		},
 	}
 )
@@ -47,12 +52,35 @@ func check(e error) {
 		panic(e)
 	}
 }
+func getExecutableDir() string {
+	ex, err := os.Executable()
+	check(err)
+	return filepathUtil.Dir(ex)
+}
+func saveToFile() {
+	var tomlData toml.TOMLFile
+	tomlData.Request.Url = url
+	tomlData.Request.Method = method
+	for _, v := range headers {
+		h := strings.Split(v, ":")
+		tomlData.Request.Headers = append(tomlData.Request.Headers, toml.Header{Name: strings.TrimSpace(h[0]), Value: strings.TrimSpace(h[1])})
+	}
+
+	file, err := os.Create(getExecutableDir() + "/storage/" + save + ".toml")
+	check(err)
+	defer file.Close()
+	toml.Encode(file, tomlData)
+	check(err)
+
+	fmt.Printf("Saved request in %s\n", getExecutableDir()+"/storage/"+save+".toml")
+}
+
 func loadFromFile() {
 	wd, err := os.Getwd()
 	check(err)
 
 	var tomlData toml.TOMLFile
-	toml.Decode(wd+filepath, &tomlData)
+	toml.Decode(wd+"/"+filepath, &tomlData)
 	check(err)
 
 	url = tomlData.Request.Url
