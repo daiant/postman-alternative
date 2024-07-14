@@ -1,8 +1,6 @@
 module desktop
 
-go 1.21
-
-toolchain go1.22.5
+go 1.22.5
 
 require github.com/wailsapp/wails/v2 v2.9.1
 
@@ -34,6 +32,9 @@ require (
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
+	jerry.io/core v0.0.0-00010101000000-000000000000
 )
 
 // replace github.com/wailsapp/wails/v2 v2.9.1 => /home/charli/go/pkg/mod
+
+replace jerry.io/core => ../core
