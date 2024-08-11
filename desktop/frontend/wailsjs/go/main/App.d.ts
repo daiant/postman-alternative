@@ -3,3 +3,5 @@
 import {http_types} from '../models';
 
 export function DoRequest(arg1:string,arg2:string):Promise<http_types.Response>;
+
+export function SaveRequest(arg1:string):Promise<boolean>;

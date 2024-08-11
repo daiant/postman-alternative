@@ -5,3 +5,7 @@
 export function DoRequest(arg1, arg2) {
   return window['go']['main']['App']['DoRequest'](arg1, arg2);
 }
+
+export function SaveRequest(arg1) {
+  return window['go']['main']['App']['SaveRequest'](arg1);
+}
