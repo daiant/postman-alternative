@@ -6,6 +6,10 @@ export function DoRequest(arg1) {
   return window['go']['main']['App']['DoRequest'](arg1);
 }
 
+export function GetSavedRequestsInWorkspace() {
+  return window['go']['main']['App']['GetSavedRequestsInWorkspace']();
+}
+
 export function SaveRequest(arg1) {
   return window['go']['main']['App']['SaveRequest'](arg1);
 }

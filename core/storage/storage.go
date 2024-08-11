@@ -27,3 +27,23 @@ func Save(url string) error {
 	file.Sync()
 	return err
 }
+
+func loadDir(curr_path string) map[string]interface{} {
+	root := make(map[string]interface{})
+	filenames, err := os.ReadDir(curr_path)
+	if err != nil {
+		return nil
+	}
+	for _, fn := range filenames {
+		if fn.IsDir() {
+			newPath := path.Join(curr_path, fn.Name())
+			root[fn.Name()] = loadDir(newPath)
+		} else {
+			root[fn.Name()] = fn.Name()
+		}
+	}
+	return root
+}
+func LoadWorkspace() (map[string]interface{}, error) {
+	return loadDir(baseLocation()), nil
+}

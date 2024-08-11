@@ -28,7 +28,9 @@ func (a *App) SaveRequest(url string) bool {
 	err := storage.Save(url)
 	return err == nil
 }
-
+func (a *App) GetSavedRequestsInWorkspace() (map[string]interface{}, error) {
+	return storage.LoadWorkspace()
+}
 func (a *App) DoRequest(request http_types.Request) http_types.Response {
 	res := http_types.Response{}
 	response, err := http_utils.MakeRequest(request)
