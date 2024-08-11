@@ -15,10 +15,21 @@ func MakeRequest(req http_types.Request) (*http.Response, error) {
 		return nil, err
 	}
 	setHeaders(request, req.Headers)
+	setParams(request, req.Params)
 	return client.Do(request)
 }
-func setHeaders(request *http.Request, headers []http_types.Header) {
-	for _, header := range headers {
-		request.Header.Add(header.Name, header.Value)
+func setParams(request *http.Request, params [][]string) {
+	q := request.URL.Query()
+	for i := range params[0] {
+		q.Add(params[0][i], params[1][i])
+	}
+	request.URL.RawQuery = q.Encode()
+}
+func setHeaders(request *http.Request, headers [][]string) {
+	if len(headers) <= 0 {
+		return
+	}
+	for i := range headers[0] {
+		request.Header.Add(headers[0][i], headers[1][i])
 	}
 }

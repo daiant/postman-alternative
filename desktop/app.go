@@ -29,12 +29,9 @@ func (a *App) SaveRequest(url string) bool {
 	return err == nil
 }
 
-func (a *App) DoRequest(url string, method string) http_types.Response {
+func (a *App) DoRequest(request http_types.Request) http_types.Response {
 	res := http_types.Response{}
-	response, err := http_utils.MakeRequest(http_types.Request{
-		Url:    url,
-		Method: method,
-	})
+	response, err := http_utils.MakeRequest(request)
 	if err != nil {
 		// TODO: For now
 		return res
