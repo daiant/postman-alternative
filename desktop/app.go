@@ -6,6 +6,7 @@ import (
 
 	http_utils "jerry.io/core/http"
 	http_types "jerry.io/core/http/types"
+	storage "jerry.io/core/storage"
 )
 
 // App struct
@@ -22,6 +23,10 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+}
+func (a *App) SaveRequest(url string) bool {
+	err := storage.Save(url)
+	return err == nil
 }
 
 func (a *App) DoRequest(url string, method string) http_types.Response {
